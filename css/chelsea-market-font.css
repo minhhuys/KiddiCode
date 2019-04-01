@@ -1,0 +1,10 @@
+/* chelsea-market-regular - latin */
+@font-face {
+  font-family: 'Chelsea Market';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/chelsea-market/chelsea-market-v5-latin-regular.eot");
+  /* IE9 Compat Modes */
+  src: local("Chelsea Market"), local("ChelseaMarket-Regular"), url("../fonts/chelsea-market/chelsea-market-v5-latin-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/chelsea-market/chelsea-market-v5-latin-regular.woff2") format("woff2"), url("../fonts/chelsea-market/chelsea-market-v5-latin-regular.woff") format("woff"), url("../fonts/chelsea-market/chelsea-market-v5-latin-regular.ttf") format("truetype"), url("../fonts/chelsea-market/chelsea-market-v5-latin-regular.svg#ChelseaMarket") format("svg");
+  /* Legacy iOS */
+}
