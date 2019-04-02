@@ -99,8 +99,8 @@ var Home = {
                         // console.log(item);
                         $.each(item, function (i, vl) {
                             build += '<li class="au-tab-list__item"><a href="#' + vl.subDescription + '" role = "tab" data - toggle="tab" aria-controls="' + vl.subDescription + '" aria - selected="true" > ' + vl.name + '</a ></li > ';
-                            $('.au-tab-list').html(build);
-                            $('.au-tab-content').html(Home.buildBenefit(rlsIndex, vl));
+                            // $('.au-tab-list').html(build);
+                            // $('.au-tab-content').html(Home.buildBenefit(rlsIndex, vl));
 
                         })
                     })
