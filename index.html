@@ -39,7 +39,7 @@
     <link href="vendor/revolution/css/settings.css" rel="stylesheet" />
 
     <!-- Main CSS-->
-    <link href="css/main.min.css" rel="stylesheet" media="all">
+    <link href="css/main.css" rel="stylesheet" media="all">
 
     <!--Favicons-->
     <link rel="shortcut icon" href="favicon.png">
@@ -65,7 +65,7 @@
                 <div class="rev_slider fullwidthabanner js-rev" data-version="5.4.4" style="display:none"
                     data-rev-height="760" data-rev-layout="fullwidth" data-rev-stylearrow="au-rev-arrow-1"
                     data-rev-bullets="false">
-                    <ul>
+                    <ul id=hp_banner>
                         <li class="rev-item rev-item-9" data-transition="fade">
                             <img class="rev-slidebg" src="images/slide-09.jpg" alt="Master Slider 01" />
                             <div class="tp-caption tp-resizeme rev-img-1"
@@ -177,8 +177,8 @@
             <!-- INTRO-->
             <section class="section p-t-150 p-b-110">
                 <div class="container">
-                    <div class="row no-gutters box-intro-wrap">
-                        <div class="col-md-6 col-lg-4">
+                    <div class="row no-gutters box-intro-wrap" id="hp_classes">
+                        <!-- <div class="col-md-6 col-lg-4">
                             <div class="box box-intro blue">
                                 <div class="box__head">
                                     <div class="box__icon au-icon-3">
@@ -240,7 +240,7 @@
                                     </a>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </section>
@@ -1000,7 +1000,7 @@
     <script src="vendor/animsition/animsition.min.js"></script>
     <script src="vendor/slick/slick.min.js"></script>
     <script src="vendor/lightbox2/js/lightbox.min.js"></script>
-    <script src="vendor/waypoints/jquery.waypoints.min.js"></script>
+    <!-- <script src="vendor/waypoints/jquery.waypoints.min.js"></script> -->
     <script src="vendor/wow/wow.min.js"></script>
     <script src="vendor/jquery.counterup/jquery.counterup.min.js"></script>
     <script src="vendor/isotope/isotope.pkgd.min.js"></script>
@@ -1008,11 +1008,11 @@
     <script src="vendor/matchHeight/jquery.matchHeight-min.js"></script>
     <script src="vendor/select2/select2.min.js"></script>
     <script src="vendor/sweetalert/sweetalert.min.js"></script>
-    <script src="vendor/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
-    <script src="vendor/noUiSlider/nouislider.min.js"></script>
+    <!-- <script src="vendor/bootstrap-progressbar/bootstrap-progressbar.min.js"></script> -->
+    <!-- <script src="vendor/noUiSlider/nouislider.min.js"></script> -->
     <script src="vendor/modalVideo/modal-video.min.js"></script>
     <script type="text/javascript" src="vendor/revolution/js/jquery.themepunch.tools.min.js"></script>
-    <script type="text/javascript" src="vendor/revolution/js/jquery.themepunch.revolution.min.js"></script>
+    <script type="text/javascript" src="vendor/revolution/js/source/jquery.themepunch.revolution.js"></script>
 
 
     <script type="text/javascript" src="vendor/revolution/js/extensions/revolution.extension.video.min.js"></script>
@@ -1030,6 +1030,7 @@
     <script type="text/javascript" src="js/config-revolution.min.js"></script>
 
     <!-- Main JS-->
+    <script src="js/jquery.cookie.js"></script>
     <script src="js/global.js"></script>
     <script src="js/common.js"></script>
     <script src="js/elasticsearch.js"></script>

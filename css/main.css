@@ -18310,3 +18310,25 @@ button:focus {
     margin-left: 300px;
   }
 }
+
+/* custom css */
+.text-ellipsis{
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
+.line-1{
+      -webkit-line-clamp: 1;
+}
+.line-2{
+      -webkit-line-clamp: 2;
+}
+.line-3{
+      -webkit-line-clamp: 3;
+}
+.line-4{
+      -webkit-line-clamp: 4;
+}
+.line-5{
+      -webkit-line-clamp: 5;
+}
