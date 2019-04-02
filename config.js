@@ -23,3 +23,7 @@ var client = elasticsearch.Client({
             }
         ]
 });
+
+if ($.cookie('kiddiCode_languageId') == undefined) {
+    $.cookie('kiddiCode_languageId', Configuration.language_vi, '/', 1);
+}
