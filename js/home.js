@@ -3,7 +3,6 @@ var Home = {
     data: [],
     dataCategory: [],
 
-
     init() {
         let searchParams = {
             index: 'categories',
@@ -78,6 +77,78 @@ var Home = {
                         $.each(item, function (i, vl) {
                             $('#hp_classes').append(Home.buildClasses(i, vl));
                         })
+                    })
+                }
+
+                var index = Home.dataCategory.find(e => e.displayOrder === 5);
+                $('#hp_teacher h2').html(index.name);
+                if (index != undefined) {
+                    $.each(index.relationIds, function (rlsIndex, rlsValue) {
+                        var item = Home.data.filter(e => e.categoryIds[0] === rlsValue);
+                        $.each(item, function (i, vl) {
+                            $('#hp_teacher_content').append(Home.buildTeacher(vl));
+                        })
+                    })
+                }
+
+                var index = Home.dataCategory.find(e => e.displayOrder === 6);
+                var build = '';
+                if (index != undefined) {
+                    $.each(index.relationIds, function (rlsIndex, rlsValue) {
+                        item = Home.data.filter(e => e.categoryIds[0] === rlsValue);
+                        // console.log(item);
+                        $.each(item, function (i, vl) {
+                            build += '<li class="au-tab-list__item"><a href="#' + vl.subDescription + '" role = "tab" data - toggle="tab" aria-controls="' + vl.subDescription + '" aria - selected="true" > ' + vl.name + '</a ></li > ';
+                            $('.au-tab-list').html(build);
+                            $('.au-tab-content').html(Home.buildBenefit(rlsIndex, vl));
+
+                        })
+                    })
+                }
+
+            })
+
+            var searchProducts = {
+                from: 0,
+                size: 100,
+                body: {
+                    query: {
+                        bool: {
+                            "must": [
+                                {
+                                    query_string: {
+                                        default_field: "id",
+                                        query: tempIDs
+                                    }
+                                },
+                                {
+                                    match: { "languageId": $.cookie('kiddiCode_languageId') }
+                                },
+                            ]
+                        }
+                    }
+                }
+            };
+            client.search(searchProducts, function (err, dataProduct) {
+                $.each(dataProduct.hits.hits, function (index, value) {
+                    Home.data.push(value._source);
+                })
+
+
+                var index = Home.dataCategory.find(e => e.displayOrder === 3);
+                if (index != undefined) {
+                    $.each(index.relationIds, function (rlsIndex, rlsValue) {
+                        var item = Home.data.find(e => e.id === rlsValue);
+                        $('#hp_slogan').append(Home.buildSlogan(item));
+                    })
+                }
+
+                var index = Home.dataCategory.find(e => e.displayOrder === 4);
+                if (index != undefined) {
+                    $.each(index.relationIds, function (rlsIndex, rlsValue) {
+                        var item = Home.data.find(e => e.id === rlsValue);
+                        // console.log(item);
+
                     })
                 }
             })
@@ -169,6 +240,97 @@ var Home = {
         // build += '				<i class="zmdi zmdi-chevron-right"></i>';
         // build += '				<i class="zmdi zmdi-chevron-right"></i>';
         // build += '			</a>';
+        build += '		</div>';
+        build += '	</div>';
+        build += '</div>';
+        return build;
+    },
+
+    buildSlogan(data) {
+        var build = '';
+        var imgUrl = '';
+
+        $.each(data.images, function (index, value) {
+            imgUrl = Configuration.imageRoot + value.path + '?mode=crop&width=1920height=600';
+        })
+
+        build += '<section class="section p-t-95 p-b-100 bg-class" style="background : url(' + imgUrl + ') center center/cover no-repeat">';
+        build += '	<div class="container">';
+        build += '		<div class="row">';
+        build += '			<div class="col-md-6 offset-md-6">';
+        build += '				<div class="p-l-70 p-md-l-0">';
+        build += '					<div';
+        build += '						class="section-heading section-heading-1 section-heading-1--small text-left m-b-35">';
+        build += '						<h2 class="section-heading__title">' + data.name + '</h2>';
+        build += '						<div class="section-heading__line">';
+        build += '							<img src="images/icon/line-blue-small.png" alt="Line">';
+        build += '						</div>';
+        build += '					</div>';
+        build += '					<p class="m-b-15">' + data.description + '</p>';
+        build += '					<a class="au-btn--blue au-btn" href="#">learn more';
+        build += '						<i class="zmdi zmdi-chevron-right"></i>';
+        build += '						<i class="zmdi zmdi-chevron-right"></i>';
+        build += '					</a>';
+        build += '				</div>';
+        build += '			</div>';
+        build += '		</div>';
+        build += '	</div>';
+        build += '</section>';
+        return build;
+    },
+
+    buildTeacher(data) {
+        var build = '';
+        build += '<div class="col-lg-6">';
+        build += '	<div class="media media-teacher-2">';
+        build += '		<div class="media__img">';
+        build += '			<a href="teacher-single.html">';
+        build += '				<img src="images/teacher-06.jpg" alt="' + data.name + '" />';
+        build += '			</a>';
+        build += '		</div>';
+        build += '		<div class="media__body">';
+        build += '			<h4 class="media__title title title--sm title--black">';
+        build += '				<a href="teacher-single.html">' + data.name + '</a>';
+        build += '			</h4>';
+        build += '			<span class="media__desc">' + data.subDescription + '</span>';
+        build += '			<p class="media__text">' + data.description + '</p>';
+        // build += '			<div class="media__tool">';
+        // build += '				<a class="au-icon au-icon-2" href="#">';
+        // build += '					<i class="zmdi zmdi-facebook-box"></i>';
+        // build += '				</a>';
+        // build += '				<a class="au-icon au-icon-2" href="#">';
+        // build += '					<i class="zmdi zmdi-twitter"></i>';
+        // build += '				</a>';
+        // build += '				<a class="au-icon au-icon-2" href="#">';
+        // build += '					<i class="zmdi zmdi-instagram"></i>';
+        // build += '				</a>';
+        // build += '			</div>';
+        build += '		</div>';
+        build += '	</div>';
+        build += '</div>';
+        return build;
+    },
+
+    buildBenefit(index, data) {
+        var build = '';
+        build += '<div class="tab-pane au-tab-pane fade ' + index === 1 ? 'show active' : '' + '" role="tabpanel" id="' + data.subDescription + '">';
+        build += '	<div class="au-tab-pane-inner">';
+        build += '		<div class="au-tab-pane__text">';
+        build += '			<h3 class="title title--lg title--black">' + data.name + '</h3>';
+        // build += '			<p class="m-b-15"</p>';
+        build += '			<p>' + data.description + '</p>';
+        build += '			<a class="link-learn-more" href="#">learn more';
+        build += '				<i class="zmdi zmdi-chevron-right"></i>';
+        build += '				<i class="zmdi zmdi-chevron-right"></i>';
+        build += '			</a>';
+        build += '		</div>';
+        build += '		<div class="au-tab-pane__img">';
+        build += '			<div class="img-radius img--w160 m-r-30 m-md-r-0">';
+        build += '				<img src="images/offer-01.jpg" alt="Offer 1">';
+        build += '			</div>';
+        build += '			<div class="img-radius img--w220">';
+        build += '				<img src="images/offer-02.jpg" alt="Offer 2">';
+        build += '			</div>';
         build += '		</div>';
         build += '	</div>';
         build += '</div>';
