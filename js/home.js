@@ -2,6 +2,7 @@ var Home = {
 
     data: [],
     dataCategory: [],
+    dataProduct: [],
 
     init() {
         let searchParams = {
@@ -45,13 +46,21 @@ var Home = {
                         bool: {
                             "must": [
                                 {
+                                    match: { "languageId": $.cookie('kiddiCode_languageId') }
+                                },
+                            ],
+                            "should": [
+                                {
                                     query_string: {
                                         default_field: "categoryIds",
                                         query: tempIDs
                                     }
                                 },
                                 {
-                                    match: { "languageId": $.cookie('kiddiCode_languageId') }
+                                    query_string: {
+                                        default_field: "id",
+                                        query: tempIDs
+                                    }
                                 },
                             ]
                         }
@@ -59,23 +68,47 @@ var Home = {
                 }
             };
             client.search(searchArticles, function (err, dataItem) {
+
                 $.each(dataItem.hits.hits, function (index, value) {
                     Home.data.push(value._source);
                 })
                 var index = Home.dataCategory.find(e => e.displayOrder === 1);
                 if (index != undefined) {
                     $.each(index.relationIds, function (rlsIndex, rlsValue) {
-                        var item = Home.data.filter(e => e.categoryIds[0] === rlsValue);
-                        $('#hp_banner').append(Home.buildBanner(item));
-                    })
+                        var itemCategory = Home.data.find(e => e.id === rlsValue);
+                        // console.log(itemCategory)
+                    });
                 }
 
                 var index = Home.dataCategory.find(e => e.displayOrder === 2);
                 if (index != undefined) {
-                    $.each(index.relationIds, function (rlsIndex, rlsValue) {
-                        var item = Home.data.filter(e => e.categoryIds[0] === rlsValue);
-                        $.each(item, function (i, vl) {
-                            $('#hp_classes').append(Home.buildClasses(i, vl));
+
+                    $.each(index.relationIds, function (index, value) {
+                        var searchEntity = {
+                            from: 0,
+                            size: 100,
+                            body: {
+                                query: {
+                                    bool: {
+                                        "must": [
+                                            {
+                                                match: { "languageId": $.cookie('kiddiCode_languageId') }
+                                            },
+                                            {
+                                                query_string: {
+                                                    default_field: "categoryIds",
+                                                    query: value
+                                                }
+                                            },
+                                        ]
+                                    }
+                                }
+                            }
+                        };
+                        client.search(searchEntity, function (err, dataEntity) {
+                            $.each(dataEntity.hits.hits, function (i, vl) {
+                                $('#hp_classes').append(Home.buildClasses(i, vl._source));
+                            })
                         })
                     })
                 }
@@ -84,28 +117,71 @@ var Home = {
                 $('#hp_teacher h2').html(index.name);
                 if (index != undefined) {
                     $.each(index.relationIds, function (rlsIndex, rlsValue) {
-                        var item = Home.data.filter(e => e.categoryIds[0] === rlsValue);
-                        $.each(item, function (i, vl) {
-                            $('#hp_teacher_content').append(Home.buildTeacher(vl));
+                        var searchEntity = {
+                            from: 0,
+                            size: 100,
+                            body: {
+                                query: {
+                                    bool: {
+                                        "must": [
+                                            {
+                                                match: { "languageId": $.cookie('kiddiCode_languageId') }
+                                            },
+                                            {
+                                                query_string: {
+                                                    default_field: "categoryIds",
+                                                    query: rlsValue
+                                                }
+                                            },
+                                        ]
+                                    }
+                                }
+                            }
+                        };
+                        client.search(searchEntity, function (err, dataEntity) {
+                            $.each(dataEntity.hits.hits, function (i, vl) {
+                                $('#hp_teacher_content').append(Home.buildTeacher(vl._source));
+                            })
                         })
+
                     })
                 }
 
                 var index = Home.dataCategory.find(e => e.displayOrder === 6);
+                $('#hp_benefit h2.section-heading__title').html(index.name);
                 var build = '';
                 if (index != undefined) {
                     $.each(index.relationIds, function (rlsIndex, rlsValue) {
-                        item = Home.data.filter(e => e.categoryIds[0] === rlsValue);
-                        // console.log(item);
-                        $.each(item, function (i, vl) {
-                            build += '<li class="au-tab-list__item"><a href="#' + vl.subDescription + '" role = "tab" data - toggle="tab" aria-controls="' + vl.subDescription + '" aria - selected="true" > ' + vl.name + '</a ></li > ';
-                            // $('.au-tab-list').html(build);
-                            // $('.au-tab-content').html(Home.buildBenefit(rlsIndex, vl));
-
+                        var searchEntity = {
+                            from: 0,
+                            size: 100,
+                            body: {
+                                query: {
+                                    bool: {
+                                        "must": [
+                                            {
+                                                match: { "languageId": $.cookie('kiddiCode_languageId') }
+                                            },
+                                            {
+                                                query_string: {
+                                                    default_field: "categoryIds",
+                                                    query: rlsValue
+                                                }
+                                            },
+                                        ]
+                                    }
+                                }
+                            }
+                        };
+                        client.search(searchEntity, function (err, dataEntity) {
+                            $.each(dataEntity.hits.hits, function (i, vl) {
+                                // $('.au-tab-list').append(Home.buildTabList(i, vl._source));
+                                // $('.au-tab-content').append(Home.buildBenefit(i, vl._source));
+                            })
                         })
+
                     })
                 }
-
             })
 
             var searchProducts = {
@@ -133,8 +209,6 @@ var Home = {
                 $.each(dataProduct.hits.hits, function (index, value) {
                     Home.data.push(value._source);
                 })
-
-
                 var index = Home.dataCategory.find(e => e.displayOrder === 3);
                 if (index != undefined) {
                     $.each(index.relationIds, function (rlsIndex, rlsValue) {
@@ -144,11 +218,11 @@ var Home = {
                 }
 
                 var index = Home.dataCategory.find(e => e.displayOrder === 4);
+                $('#hp_courses h2').html(index.name)
                 if (index != undefined) {
                     $.each(index.relationIds, function (rlsIndex, rlsValue) {
                         var item = Home.data.find(e => e.id === rlsValue);
-                        // console.log(item);
-
+                        $('#hp_courses_content').append(Home.buildCourses(item));
                     })
                 }
             })
@@ -313,7 +387,7 @@ var Home = {
 
     buildBenefit(index, data) {
         var build = '';
-        build += '<div class="tab-pane au-tab-pane fade ' + index === 1 ? 'show active' : '' + '" role="tabpanel" id="' + data.subDescription + '">';
+        build += '<div class="tab-pane au-tab-pane fade" role="tabpanel" id="' + data.subDescription + '">';
         build += '	<div class="au-tab-pane-inner">';
         build += '		<div class="au-tab-pane__text">';
         build += '			<h3 class="title title--lg title--black">' + data.name + '</h3>';
@@ -330,6 +404,78 @@ var Home = {
         build += '			</div>';
         build += '			<div class="img-radius img--w220">';
         build += '				<img src="images/offer-02.jpg" alt="Offer 2">';
+        build += '			</div>';
+        build += '		</div>';
+        build += '	</div>';
+        build += '</div>';
+        return build;
+    },
+
+
+    buildTabList(index, data) {
+        var build = '';
+        build += '<li class="au-tab-list__item">';
+        build += '    <a href="#' + data.subDescription + '" role="tab" data-toggle="tab" aria-controls="' + data.subDescription + '" aria-selected="true"> ' + data.name + '</a>';
+        build += '</li> ';
+        return build;
+    },
+
+    buildCourses(data) {
+        var build = '';
+        var imgUrl = '';
+        // console.log(data);
+        var getData = [];
+        // console.log(data)
+        $.each(data.images, function (index, value) {
+            imgUrl = Configuration.imageRoot + value.path + '?mode=crop&width=640height=640';
+        })
+        $.each(data.attributes, function (index, value) {
+            var dataAttr = {
+                name: '',
+                value: ''
+            }
+            console.log(value.name);
+            dataAttr.name = value.name;
+            $.each(data.variants[0].attributeValueIds, function (i, vl) {
+                var dataSize = value.attributeValues.find(e => e.id === vl);
+                if (dataSize != undefined) {
+                    dataAttr.value = dataSize.value;
+                }
+            })
+            getData.push(dataAttr);
+        })
+
+        build += '<div class="col-md-6 col-lg-4">';
+        build += '	<div class="media media-our-class-5 wow fadeInUp">';
+        build += '		<div class="media__img">';
+        build += '			<a class="img-circle" href="classes-single.html">';
+        build += '				<img src="' + imgUrl + '" alt="' + data.name + '" />';
+        build += '			</a>';
+        // build += '			<span class="media-our-class__price">';
+        // build += '				<span class="inner">$22</span>';
+        // build += '			</span>';
+        build += '		</div>';
+        build += '		<div class="media__body">';
+        build += '			<h3 class="media__title">';
+        build += '				<a href="classes-single.html">' + data.name + '</a>';
+        build += '			</h3>';
+        build += '			<span class="date-time m-r-15">' + data.subDescription.slice(0, 19) + '</span>';
+        build += '			<span class="date-time">' + data.subDescription.slice(21, 35) + '</span>';
+        build += '			<div class="media-our-class__info">';
+        build += '				<div class="row no-gutters">';
+        build += '					<div class="col-6">';
+        build += '						<div class="item has-seprator">';
+        build += '							<span class="name">' + getData[0].name + '</span>';
+        build += '							<span class="value">' + getData[0].value + '</span>';
+        build += '						</div>';
+        build += '					</div>';
+        build += '					<div class="col-6">';
+        build += '						<div class="item">';
+        build += '							<span class="name">' + getData[1].name + '</span>';
+        build += '							<span class="value">' + getData[1].value + '</span>';
+        build += '						</div>';
+        build += '					</div>';
+        build += '				</div>';
         build += '			</div>';
         build += '		</div>';
         build += '	</div>';
