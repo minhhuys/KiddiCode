@@ -448,7 +448,7 @@ var Home = {
         build += '<div class="col-md-6 col-lg-4">';
         build += '	<div class="media media-our-class-5 wow fadeInUp">';
         build += '		<div class="media__img">';
-        build += '			<a class="img-circle" href="classes-single.html">';
+        build += '			<a class="img-circle" href="classes-single.html?id=' + data.id + '">';
         build += '				<img src="' + imgUrl + '" alt="' + data.name + '" />';
         build += '			</a>';
         // build += '			<span class="media-our-class__price">';
