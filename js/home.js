@@ -182,6 +182,12 @@ var Home = {
 
                     })
                 }
+
+                var index = Home.dataCategory.find(e => e.displayOrder === 7);
+                var build = '';
+                $.each(index.images, function (index, value) {
+                    build += '<div class="slick__item"><a class="img-partner" href="#" ><img src="' + Configuration.imageRoot + value.path + "?mode=crop&width=189&height=125" + '"></a></div>';
+                })
             })
 
             var searchProducts = {
